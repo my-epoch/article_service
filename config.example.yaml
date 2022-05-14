@@ -1,0 +1,7 @@
+
+# service config
+name: object
+addr: "localhost:50050"
+check:
+  interval: 20s
+  timeout: 5s
