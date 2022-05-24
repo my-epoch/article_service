@@ -1,7 +1,7 @@
-
 # service config
 name: object
-addr: "localhost:50050"
+addr: "addr:port"
 check:
-  interval: 20s
-  timeout: 5s
+  GRPC: "addr:port"
+  interval: "20s"
+  timeout: "5s"
