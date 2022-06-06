@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/my-epoch/api-gateway/pkg/consul"
 	"github.com/my-epoch/api-gateway/pkg/logger"
-	"github.com/my-epoch/api-gateway/pkg/service_config"
 	"object_service/internal/gserver"
+	"object_service/pkg/consul"
+	"object_service/pkg/service_config"
 )
 
 func main() {
