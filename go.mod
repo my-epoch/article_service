@@ -1,8 +1,9 @@
-module object_service
+module github.com/my-epoch/object_service
 
 go 1.18
 
 require (
+	github.com/hashicorp/consul/api v1.12.0
 	github.com/my-epoch/api-gateway v0.0.0-20220524085243-72a03af4231e
 	google.golang.org/grpc v1.46.2
 )
@@ -12,7 +13,6 @@ require (
 	github.com/fatih/color v1.9.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.0 // indirect
-	github.com/hashicorp/consul/api v1.12.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.1 // indirect
 	github.com/hashicorp/go-hclog v0.12.0 // indirect
 	github.com/hashicorp/go-immutable-radix v1.0.0 // indirect

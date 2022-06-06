@@ -3,7 +3,7 @@ package consul
 import (
 	consulApi "github.com/hashicorp/consul/api"
 	"github.com/my-epoch/api-gateway/pkg/logger"
-	"object_service/pkg/service_config"
+	"github.com/my-epoch/object_service/pkg/service_config"
 )
 
 var client *consulApi.Client
