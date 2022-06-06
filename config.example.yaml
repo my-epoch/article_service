@@ -1,6 +1,7 @@
 # service config
 name: object
-addr: "addr:port"
+addr: "addr"
+port: 50050
 check:
   GRPC: "addr:port"
   interval: "20s"
