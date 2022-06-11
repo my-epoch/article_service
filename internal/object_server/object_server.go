@@ -11,5 +11,8 @@ type ObjectServiceServer struct {
 }
 
 func (ObjectServiceServer) Status(context.Context, *pb.StatusRequest) (*pb.StatusResponse, error) {
-	return &pb.StatusResponse{Status: "ok", Time: time.Now().String()}, nil
+	return &pb.StatusResponse{
+		Status: "ok",
+		Time:   time.Now().Format(time.RFC3339),
+	}, nil
 }
