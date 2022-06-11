@@ -1,0 +1,23 @@
+syntax = "proto3";
+option go_package = "github.com/my-epoch/object_service/gen";
+package object_service_api;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service ObjectServiceAPI {
+  rpc Status (StatusRequest) returns (StatusResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/object/status"
+    };
+  };
+}
+
+message StatusRequest{
+
+}
+
+message StatusResponse {
+  string Status = 1;
+  string Time = 2;
+}
