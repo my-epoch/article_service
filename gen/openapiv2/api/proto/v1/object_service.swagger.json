@@ -16,6 +16,38 @@
     "application/json"
   ],
   "paths": {
+    "/api/v1/object": {
+      "post": {
+        "operationId": "ObjectServiceAPI_Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/object_service_apiCreateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/object_service_apiCreateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ObjectServiceAPI"
+        ]
+      }
+    },
     "/api/v1/object/status": {
       "get": {
         "operationId": "ObjectServiceAPI_Status",
@@ -38,14 +70,14 @@
         ]
       }
     },
-    "/api/v1/object/{ID}": {
+    "/api/v1/object/{id}": {
       "get": {
         "operationId": "ObjectServiceAPI_GetById",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/object_service_apiObjectGetByIdResponse"
+              "$ref": "#/definitions/object_service_apiGetByIdResponse"
             }
           },
           "default": {
@@ -57,7 +89,7 @@
         },
         "parameters": [
           {
-            "name": "ID",
+            "name": "id",
             "in": "path",
             "required": true,
             "type": "integer",
@@ -67,52 +99,273 @@
         "tags": [
           "ObjectServiceAPI"
         ]
+      },
+      "delete": {
+        "operationId": "ObjectServiceAPI_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/object_service_apiDeleteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "ObjectServiceAPI"
+        ]
+      },
+      "put": {
+        "operationId": "ObjectServiceAPI_Update",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/object_service_apiUpdateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "mainImageUuid": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "latitude": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "longitude": {
+                  "type": "number",
+                  "format": "float"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "ObjectServiceAPI"
+        ]
+      }
+    },
+    "/api/v1/objects": {
+      "get": {
+        "operationId": "ObjectServiceAPI_GetList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/object_service_apiGetListResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "quantity",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "ObjectServiceAPI"
+        ]
+      }
+    },
+    "/api/v1/objects/search": {
+      "get": {
+        "operationId": "ObjectServiceAPI_Search",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/object_service_apiSearchResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ObjectServiceAPI"
+        ]
       }
     }
   },
   "definitions": {
-    "object_service_apiObject": {
+    "object_service_apiCreateRequest": {
       "type": "object",
       "properties": {
-        "ID": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "Title": {
+        "title": {
           "type": "string"
         },
-        "MainImageUUID": {
+        "mainImageUuid": {
           "type": "string"
         },
-        "Description": {
+        "description": {
           "type": "string"
         },
-        "Latitude": {
+        "latitude": {
           "type": "number",
           "format": "float"
         },
-        "Longitude": {
+        "longitude": {
           "type": "number",
           "format": "float"
         }
       }
     },
-    "object_service_apiObjectGetByIdResponse": {
+    "object_service_apiCreateResponse": {
       "type": "object",
       "properties": {
-        "Object": {
+        "object": {
           "$ref": "#/definitions/object_service_apiObject"
+        }
+      }
+    },
+    "object_service_apiDeleteResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "object_service_apiGetByIdResponse": {
+      "type": "object",
+      "properties": {
+        "object": {
+          "$ref": "#/definitions/object_service_apiObject"
+        }
+      }
+    },
+    "object_service_apiGetListResponse": {
+      "type": "object",
+      "properties": {
+        "objects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/object_service_apiObject"
+          }
+        }
+      }
+    },
+    "object_service_apiObject": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "title": {
+          "type": "string"
+        },
+        "mainImageUuid": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "latitude": {
+          "type": "number",
+          "format": "float"
+        },
+        "longitude": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "object_service_apiSearchResponse": {
+      "type": "object",
+      "properties": {
+        "objects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/object_service_apiObject"
+          }
         }
       }
     },
     "object_service_apiStatusResponse": {
       "type": "object",
       "properties": {
-        "Status": {
+        "status": {
           "type": "string"
         },
-        "Time": {
+        "time": {
           "type": "string"
+        }
+      }
+    },
+    "object_service_apiUpdateResponse": {
+      "type": "object",
+      "properties": {
+        "object": {
+          "$ref": "#/definitions/object_service_apiObject"
         }
       }
     },

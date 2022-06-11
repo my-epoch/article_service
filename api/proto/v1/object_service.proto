@@ -5,6 +5,83 @@ package object_service_api;
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
+message Object {
+  uint32 id = 1;
+  string title = 2;
+  string main_image_uuid = 3;
+  string description = 4;
+
+  float latitude = 5;
+  float longitude = 6;
+}
+
+message StatusRequest {
+
+}
+
+message StatusResponse {
+  string status = 1;
+  string time = 2;
+}
+
+message GetByIdRequest {
+  uint32 id = 1;
+}
+
+message GetByIdResponse {
+  Object object = 1;
+}
+
+message CreateRequest {
+  string title = 1;
+  string main_image_uuid = 2;
+  string description = 3;
+  float latitude = 4;
+  float longitude = 5;
+}
+
+message CreateResponse {
+  Object object = 1;
+}
+
+message UpdateRequest {
+  uint32 id = 1;
+  string title = 2;
+  string main_image_uuid = 3;
+  string description = 4;
+  float latitude = 5;
+  float longitude = 6;
+}
+
+message UpdateResponse {
+  Object object = 1;
+}
+
+message GetListRequest {
+  int32 quantity = 1;
+  int32 offset = 2;
+}
+
+message GetListResponse {
+  repeated Object objects = 1;
+}
+
+message SearchRequest {
+  string query = 1;
+}
+
+message SearchResponse {
+  repeated Object objects = 1;
+}
+
+message DeleteRequest {
+  uint32 id = 1;
+}
+
+message DeleteResponse {
+  string status = 1;
+}
+
 service ObjectServiceAPI {
   rpc Status (StatusRequest) returns (StatusResponse) {
     option (google.api.http) = {
@@ -12,36 +89,41 @@ service ObjectServiceAPI {
     };
   };
 
-  rpc GetById(ObjectGetByIdRequest) returns (ObjectGetByIdResponse) {
+  rpc Create(CreateRequest) returns (CreateResponse) {
     option (google.api.http) = {
-      get: "/api/v1/object/{ID}"
+      post: "/api/v1/object",
+      body: "*"
     };
   }
-}
 
-message Object {
-  uint32 ID = 1;
-  string Title = 2;
-  string MainImageUUID = 3;
-  string Description = 4;
+  rpc GetById(GetByIdRequest) returns (GetByIdResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/object/{id}"
+    };
+  }
 
-  float Latitude = 5;
-  float Longitude = 6;
-}
+  rpc GetList(GetListRequest) returns (GetListResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/objects"
+    };
+  }
 
-message StatusRequest{
+  rpc Search(SearchRequest) returns (SearchResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/objects/search"
+    };
+  }
 
-}
+  rpc Update(UpdateRequest) returns (UpdateResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/object/{id}",
+      body: "*"
+    };
+  }
 
-message StatusResponse {
-  string Status = 1;
-  string Time = 2;
-}
-
-message ObjectGetByIdRequest {
-  uint32 ID = 1;
-}
-
-message ObjectGetByIdResponse {
-  Object Object = 1;
+  rpc Delete(DeleteRequest) returns (DeleteResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1/object/{id}"
+    };
+  }
 }

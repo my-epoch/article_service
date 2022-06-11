@@ -23,7 +23,12 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ObjectServiceAPIClient interface {
 	Status(ctx context.Context, in *StatusRequest, opts ...grpc.CallOption) (*StatusResponse, error)
-	GetById(ctx context.Context, in *ObjectGetByIdRequest, opts ...grpc.CallOption) (*ObjectGetByIdResponse, error)
+	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
+	GetById(ctx context.Context, in *GetByIdRequest, opts ...grpc.CallOption) (*GetByIdResponse, error)
+	GetList(ctx context.Context, in *GetListRequest, opts ...grpc.CallOption) (*GetListResponse, error)
+	Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error)
+	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
+	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
 }
 
 type objectServiceAPIClient struct {
@@ -43,9 +48,54 @@ func (c *objectServiceAPIClient) Status(ctx context.Context, in *StatusRequest, 
 	return out, nil
 }
 
-func (c *objectServiceAPIClient) GetById(ctx context.Context, in *ObjectGetByIdRequest, opts ...grpc.CallOption) (*ObjectGetByIdResponse, error) {
-	out := new(ObjectGetByIdResponse)
+func (c *objectServiceAPIClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	out := new(CreateResponse)
+	err := c.cc.Invoke(ctx, "/object_service_api.ObjectServiceAPI/Create", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *objectServiceAPIClient) GetById(ctx context.Context, in *GetByIdRequest, opts ...grpc.CallOption) (*GetByIdResponse, error) {
+	out := new(GetByIdResponse)
 	err := c.cc.Invoke(ctx, "/object_service_api.ObjectServiceAPI/GetById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *objectServiceAPIClient) GetList(ctx context.Context, in *GetListRequest, opts ...grpc.CallOption) (*GetListResponse, error) {
+	out := new(GetListResponse)
+	err := c.cc.Invoke(ctx, "/object_service_api.ObjectServiceAPI/GetList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *objectServiceAPIClient) Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error) {
+	out := new(SearchResponse)
+	err := c.cc.Invoke(ctx, "/object_service_api.ObjectServiceAPI/Search", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *objectServiceAPIClient) Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error) {
+	out := new(UpdateResponse)
+	err := c.cc.Invoke(ctx, "/object_service_api.ObjectServiceAPI/Update", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *objectServiceAPIClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error) {
+	out := new(DeleteResponse)
+	err := c.cc.Invoke(ctx, "/object_service_api.ObjectServiceAPI/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +107,12 @@ func (c *objectServiceAPIClient) GetById(ctx context.Context, in *ObjectGetByIdR
 // for forward compatibility
 type ObjectServiceAPIServer interface {
 	Status(context.Context, *StatusRequest) (*StatusResponse, error)
-	GetById(context.Context, *ObjectGetByIdRequest) (*ObjectGetByIdResponse, error)
+	Create(context.Context, *CreateRequest) (*CreateResponse, error)
+	GetById(context.Context, *GetByIdRequest) (*GetByIdResponse, error)
+	GetList(context.Context, *GetListRequest) (*GetListResponse, error)
+	Search(context.Context, *SearchRequest) (*SearchResponse, error)
+	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
+	Delete(context.Context, *DeleteRequest) (*DeleteResponse, error)
 	mustEmbedUnimplementedObjectServiceAPIServer()
 }
 
@@ -68,8 +123,23 @@ type UnimplementedObjectServiceAPIServer struct {
 func (UnimplementedObjectServiceAPIServer) Status(context.Context, *StatusRequest) (*StatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Status not implemented")
 }
-func (UnimplementedObjectServiceAPIServer) GetById(context.Context, *ObjectGetByIdRequest) (*ObjectGetByIdResponse, error) {
+func (UnimplementedObjectServiceAPIServer) Create(context.Context, *CreateRequest) (*CreateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedObjectServiceAPIServer) GetById(context.Context, *GetByIdRequest) (*GetByIdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetById not implemented")
+}
+func (UnimplementedObjectServiceAPIServer) GetList(context.Context, *GetListRequest) (*GetListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetList not implemented")
+}
+func (UnimplementedObjectServiceAPIServer) Search(context.Context, *SearchRequest) (*SearchResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
+}
+func (UnimplementedObjectServiceAPIServer) Update(context.Context, *UpdateRequest) (*UpdateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
+func (UnimplementedObjectServiceAPIServer) Delete(context.Context, *DeleteRequest) (*DeleteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedObjectServiceAPIServer) mustEmbedUnimplementedObjectServiceAPIServer() {}
 
@@ -102,8 +172,26 @@ func _ObjectServiceAPI_Status_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ObjectServiceAPI_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ObjectServiceAPIServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/object_service_api.ObjectServiceAPI/Create",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ObjectServiceAPIServer).Create(ctx, req.(*CreateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ObjectServiceAPI_GetById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ObjectGetByIdRequest)
+	in := new(GetByIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -115,7 +203,79 @@ func _ObjectServiceAPI_GetById_Handler(srv interface{}, ctx context.Context, dec
 		FullMethod: "/object_service_api.ObjectServiceAPI/GetById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ObjectServiceAPIServer).GetById(ctx, req.(*ObjectGetByIdRequest))
+		return srv.(ObjectServiceAPIServer).GetById(ctx, req.(*GetByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ObjectServiceAPI_GetList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ObjectServiceAPIServer).GetList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/object_service_api.ObjectServiceAPI/GetList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ObjectServiceAPIServer).GetList(ctx, req.(*GetListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ObjectServiceAPI_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ObjectServiceAPIServer).Search(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/object_service_api.ObjectServiceAPI/Search",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ObjectServiceAPIServer).Search(ctx, req.(*SearchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ObjectServiceAPI_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ObjectServiceAPIServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/object_service_api.ObjectServiceAPI/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ObjectServiceAPIServer).Update(ctx, req.(*UpdateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ObjectServiceAPI_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ObjectServiceAPIServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/object_service_api.ObjectServiceAPI/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ObjectServiceAPIServer).Delete(ctx, req.(*DeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -132,8 +292,28 @@ var ObjectServiceAPI_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ObjectServiceAPI_Status_Handler,
 		},
 		{
+			MethodName: "Create",
+			Handler:    _ObjectServiceAPI_Create_Handler,
+		},
+		{
 			MethodName: "GetById",
 			Handler:    _ObjectServiceAPI_GetById_Handler,
+		},
+		{
+			MethodName: "GetList",
+			Handler:    _ObjectServiceAPI_GetList_Handler,
+		},
+		{
+			MethodName: "Search",
+			Handler:    _ObjectServiceAPI_Search_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _ObjectServiceAPI_Update_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _ObjectServiceAPI_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
