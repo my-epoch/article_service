@@ -37,9 +37,74 @@
           "ObjectServiceAPI"
         ]
       }
+    },
+    "/api/v1/object/{ID}": {
+      "get": {
+        "operationId": "ObjectServiceAPI_GetById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/object_service_apiObjectGetByIdResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ID",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "ObjectServiceAPI"
+        ]
+      }
     }
   },
   "definitions": {
+    "object_service_apiObject": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Title": {
+          "type": "string"
+        },
+        "MainImageUUID": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "Latitude": {
+          "type": "number",
+          "format": "float"
+        },
+        "Longitude": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "object_service_apiObjectGetByIdResponse": {
+      "type": "object",
+      "properties": {
+        "Object": {
+          "$ref": "#/definitions/object_service_apiObject"
+        }
+      }
+    },
     "object_service_apiStatusResponse": {
       "type": "object",
       "properties": {

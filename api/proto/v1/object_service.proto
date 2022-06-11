@@ -11,6 +11,22 @@ service ObjectServiceAPI {
       get: "/api/v1/object/status"
     };
   };
+
+  rpc GetById(ObjectGetByIdRequest) returns (ObjectGetByIdResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/object/{ID}"
+    };
+  }
+}
+
+message Object {
+  uint32 ID = 1;
+  string Title = 2;
+  string MainImageUUID = 3;
+  string Description = 4;
+
+  float Latitude = 5;
+  float Longitude = 6;
 }
 
 message StatusRequest{
@@ -20,4 +36,12 @@ message StatusRequest{
 message StatusResponse {
   string Status = 1;
   string Time = 2;
+}
+
+message ObjectGetByIdRequest {
+  uint32 ID = 1;
+}
+
+message ObjectGetByIdResponse {
+  Object Object = 1;
 }

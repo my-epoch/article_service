@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ObjectServiceAPIClient interface {
 	Status(ctx context.Context, in *StatusRequest, opts ...grpc.CallOption) (*StatusResponse, error)
+	GetById(ctx context.Context, in *ObjectGetByIdRequest, opts ...grpc.CallOption) (*ObjectGetByIdResponse, error)
 }
 
 type objectServiceAPIClient struct {
@@ -42,11 +43,21 @@ func (c *objectServiceAPIClient) Status(ctx context.Context, in *StatusRequest, 
 	return out, nil
 }
 
+func (c *objectServiceAPIClient) GetById(ctx context.Context, in *ObjectGetByIdRequest, opts ...grpc.CallOption) (*ObjectGetByIdResponse, error) {
+	out := new(ObjectGetByIdResponse)
+	err := c.cc.Invoke(ctx, "/object_service_api.ObjectServiceAPI/GetById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ObjectServiceAPIServer is the server API for ObjectServiceAPI service.
 // All implementations must embed UnimplementedObjectServiceAPIServer
 // for forward compatibility
 type ObjectServiceAPIServer interface {
 	Status(context.Context, *StatusRequest) (*StatusResponse, error)
+	GetById(context.Context, *ObjectGetByIdRequest) (*ObjectGetByIdResponse, error)
 	mustEmbedUnimplementedObjectServiceAPIServer()
 }
 
@@ -56,6 +67,9 @@ type UnimplementedObjectServiceAPIServer struct {
 
 func (UnimplementedObjectServiceAPIServer) Status(context.Context, *StatusRequest) (*StatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Status not implemented")
+}
+func (UnimplementedObjectServiceAPIServer) GetById(context.Context, *ObjectGetByIdRequest) (*ObjectGetByIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetById not implemented")
 }
 func (UnimplementedObjectServiceAPIServer) mustEmbedUnimplementedObjectServiceAPIServer() {}
 
@@ -88,6 +102,24 @@ func _ObjectServiceAPI_Status_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ObjectServiceAPI_GetById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ObjectGetByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ObjectServiceAPIServer).GetById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/object_service_api.ObjectServiceAPI/GetById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ObjectServiceAPIServer).GetById(ctx, req.(*ObjectGetByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ObjectServiceAPI_ServiceDesc is the grpc.ServiceDesc for ObjectServiceAPI service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +130,10 @@ var ObjectServiceAPI_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Status",
 			Handler:    _ObjectServiceAPI_Status_Handler,
+		},
+		{
+			MethodName: "GetById",
+			Handler:    _ObjectServiceAPI_GetById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
