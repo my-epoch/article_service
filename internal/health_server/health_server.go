@@ -1,4 +1,4 @@
-package gserver
+package health_server
 
 import (
 	"context"
