@@ -4,6 +4,7 @@ import (
 	"context"
 	pb "github.com/my-epoch/object_service/gen/go/api/proto/v1"
 	"github.com/my-epoch/object_service/internal/database"
+	"github.com/my-epoch/object_service/internal/dto"
 )
 
 func GetById(_ context.Context, request *pb.GetByIdRequest) (*pb.GetByIdResponse, error) {
@@ -12,14 +13,6 @@ func GetById(_ context.Context, request *pb.GetByIdRequest) (*pb.GetByIdResponse
 		return nil, database.ErrorTransfer(err, "Object")
 	}
 
-	response := &pb.GetByIdResponse{Object: &pb.Object{
-		Id:            object.ID,
-		Title:         object.Title,
-		MainImageUuid: object.MainImageUUID.String(),
-		Description:   object.Description,
-		Latitude:      object.Latitude,
-		Longitude:     object.Longitude,
-	}}
-
+	response := &pb.GetByIdResponse{Object: dto.ObjectModelToPb(object)}
 	return response, nil
 }

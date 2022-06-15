@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 	pb "github.com/my-epoch/object_service/gen/go/api/proto/v1"
 	"github.com/my-epoch/object_service/internal/database"
+	"github.com/my-epoch/object_service/internal/dto"
 	"github.com/my-epoch/object_service/model"
 	"github.com/my-epoch/object_service/repository"
 	"google.golang.org/grpc/codes"
@@ -31,14 +32,6 @@ func Create(_ context.Context, request *pb.CreateRequest) (*pb.CreateResponse, e
 		return nil, database.ErrorTransfer(err, "Object")
 	}
 
-	response := &pb.CreateResponse{Object: &pb.Object{
-		Id:            object.ID,
-		Title:         object.Title,
-		MainImageUuid: object.MainImageUUID.String(),
-		Description:   object.Description,
-		Latitude:      object.Latitude,
-		Longitude:     object.Longitude,
-	}}
-
+	response := &pb.CreateResponse{Object: dto.ObjectModelToPb(&object)}
 	return response, nil
 }
