@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/google/uuid"
 	pb "github.com/my-epoch/object_service/gen/go/api/proto/v1"
+	"github.com/my-epoch/object_service/internal/database"
 	"github.com/my-epoch/object_service/model"
 	"github.com/my-epoch/object_service/repository"
 	"google.golang.org/grpc/codes"
@@ -15,7 +16,7 @@ var objectRepository = repository.NewObjectRepository()
 func Create(_ context.Context, request *pb.CreateRequest) (*pb.CreateResponse, error) {
 	mainImageUuid, err := uuid.Parse(request.MainImageUuid)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "`mainImageUuid` has wrong format: %e", err)
+		return nil, status.Error(codes.Internal, "`mainImageUuid` has wrong format")
 	}
 
 	object := model.Object{
@@ -27,7 +28,7 @@ func Create(_ context.Context, request *pb.CreateRequest) (*pb.CreateResponse, e
 	}
 
 	if err := objectRepository.Create(&object); err != nil {
-		return nil, status.Errorf(codes.Internal, "cannot create record in table: %e", err)
+		return nil, database.ErrorTransfer(err, "Object")
 	}
 
 	response := &pb.CreateResponse{Object: &pb.Object{
