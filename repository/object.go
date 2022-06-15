@@ -29,3 +29,14 @@ func (or *ObjectRepository) Save(object *model.Object) error {
 	result := or.db.Save(&object)
 	return result.Error
 }
+
+func (or *ObjectRepository) GetList(quantity int32, offset int32) ([]model.Object, error) {
+	var objects []model.Object
+	result := or.db.
+		Limit(int(quantity)).
+		Offset(int(offset)).
+		Order("title").
+		Find(&objects)
+
+	return objects, result.Error
+}

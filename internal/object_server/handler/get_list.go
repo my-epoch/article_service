@@ -3,10 +3,20 @@ package handler
 import (
 	"context"
 	pb "github.com/my-epoch/object_service/gen/go/api/proto/v1"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	"github.com/my-epoch/object_service/internal/database"
+	"github.com/my-epoch/object_service/internal/dto"
 )
 
-func GetList(context.Context, *pb.GetListRequest) (*pb.GetListResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetList not implemented")
+func GetList(_ context.Context, request *pb.GetListRequest) (*pb.GetListResponse, error) {
+	// handling zero value
+	if request.Quantity == 0 {
+		request.Quantity = 20
+	}
+
+	objects, err := objectRepository.GetList(request.Quantity, request.Offset)
+	if err != nil {
+		return nil, database.ErrorTransfer(err, "Object")
+	}
+
+	return &pb.GetListResponse{Objects: dto.ObjectModelSliceToPbShort(objects)}, nil
 }
