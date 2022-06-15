@@ -3,6 +3,7 @@ module github.com/my-epoch/object_service
 go 1.18
 
 require (
+	github.com/google/uuid v1.1.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.0
 	github.com/hashicorp/consul/api v1.13.0
 	github.com/my-epoch/api-gateway v0.0.0-20220606065658-42d9cfa4b43e

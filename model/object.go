@@ -1,12 +1,15 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
 
 type Object struct {
 	gorm.Model
-
+	ID            uint32 `gorm:"primarykey"`
 	Title         string
-	MainImageUUID string
+	MainImageUUID uuid.UUID
 	Description   string
 
 	Latitude  float32
