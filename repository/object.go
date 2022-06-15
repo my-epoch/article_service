@@ -24,3 +24,8 @@ func (or *ObjectRepository) GetById(id uint32) (*model.Object, error) {
 	result := or.db.First(&object, "id = ?", id)
 	return &object, result.Error
 }
+
+func (or *ObjectRepository) Save(object *model.Object) error {
+	result := or.db.Save(&object)
+	return result.Error
+}
