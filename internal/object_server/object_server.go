@@ -10,9 +10,6 @@ type ObjectServiceServer struct {
 	pb.UnimplementedObjectServiceAPIServer
 }
 
-func (ObjectServiceServer) Status(ctx context.Context, request *pb.StatusRequest) (*pb.StatusResponse, error) {
-	return handler.Status(ctx, request)
-}
 func (ObjectServiceServer) Create(ctx context.Context, request *pb.CreateRequest) (*pb.CreateResponse, error) {
 	return handler.Create(ctx, request)
 }
@@ -30,4 +27,7 @@ func (ObjectServiceServer) Update(ctx context.Context, request *pb.UpdateRequest
 }
 func (ObjectServiceServer) Delete(ctx context.Context, request *pb.DeleteRequest) (*pb.DeleteResponse, error) {
 	return handler.Delete(ctx, request)
+}
+func (ObjectServiceServer) GetNearest(ctx context.Context, request *pb.GetNearestRequest) (*pb.GetNearestResponse, error) {
+	return handler.GetNearest(ctx, request)
 }

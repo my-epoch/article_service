@@ -48,28 +48,6 @@
         ]
       }
     },
-    "/api/v1/object/status": {
-      "get": {
-        "operationId": "ObjectServiceAPI_Status",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/object_service_apiStatusResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "ObjectServiceAPI"
-        ]
-      }
-    },
     "/api/v1/object/{id}": {
       "get": {
         "operationId": "ObjectServiceAPI_GetById",
@@ -224,6 +202,51 @@
         ]
       }
     },
+    "/api/v1/objects/nearest": {
+      "get": {
+        "operationId": "ObjectServiceAPI_GetNearest",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/object_service_apiGetNearestResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "latitude",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "format": "float"
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "format": "float"
+          },
+          {
+            "name": "radius",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "format": "float"
+          }
+        ],
+        "tags": [
+          "ObjectServiceAPI"
+        ]
+      }
+    },
     "/api/v1/objects/search": {
       "get": {
         "operationId": "ObjectServiceAPI_Search",
@@ -308,7 +331,18 @@
         "objects": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/object_service_apiObject"
+            "$ref": "#/definitions/object_service_apiObjectShort"
+          }
+        }
+      }
+    },
+    "object_service_apiGetNearestResponse": {
+      "type": "object",
+      "properties": {
+        "objects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/object_service_apiObjectShort"
           }
         }
       }
@@ -339,25 +373,37 @@
         }
       }
     },
+    "object_service_apiObjectShort": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "title": {
+          "type": "string"
+        },
+        "mainImageUuid": {
+          "type": "string"
+        },
+        "latitude": {
+          "type": "number",
+          "format": "float"
+        },
+        "longitude": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
     "object_service_apiSearchResponse": {
       "type": "object",
       "properties": {
         "objects": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/object_service_apiObject"
+            "$ref": "#/definitions/object_service_apiObjectShort"
           }
-        }
-      }
-    },
-    "object_service_apiStatusResponse": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "time": {
-          "type": "string"
         }
       }
     },

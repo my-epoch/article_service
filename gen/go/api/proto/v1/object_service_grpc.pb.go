@@ -22,11 +22,11 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ObjectServiceAPIClient interface {
-	Status(ctx context.Context, in *StatusRequest, opts ...grpc.CallOption) (*StatusResponse, error)
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	GetById(ctx context.Context, in *GetByIdRequest, opts ...grpc.CallOption) (*GetByIdResponse, error)
 	GetList(ctx context.Context, in *GetListRequest, opts ...grpc.CallOption) (*GetListResponse, error)
 	Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error)
+	GetNearest(ctx context.Context, in *GetNearestRequest, opts ...grpc.CallOption) (*GetNearestResponse, error)
 	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
 }
@@ -37,15 +37,6 @@ type objectServiceAPIClient struct {
 
 func NewObjectServiceAPIClient(cc grpc.ClientConnInterface) ObjectServiceAPIClient {
 	return &objectServiceAPIClient{cc}
-}
-
-func (c *objectServiceAPIClient) Status(ctx context.Context, in *StatusRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	out := new(StatusResponse)
-	err := c.cc.Invoke(ctx, "/object_service_api.ObjectServiceAPI/Status", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *objectServiceAPIClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
@@ -84,6 +75,15 @@ func (c *objectServiceAPIClient) Search(ctx context.Context, in *SearchRequest, 
 	return out, nil
 }
 
+func (c *objectServiceAPIClient) GetNearest(ctx context.Context, in *GetNearestRequest, opts ...grpc.CallOption) (*GetNearestResponse, error) {
+	out := new(GetNearestResponse)
+	err := c.cc.Invoke(ctx, "/object_service_api.ObjectServiceAPI/GetNearest", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *objectServiceAPIClient) Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error) {
 	out := new(UpdateResponse)
 	err := c.cc.Invoke(ctx, "/object_service_api.ObjectServiceAPI/Update", in, out, opts...)
@@ -106,11 +106,11 @@ func (c *objectServiceAPIClient) Delete(ctx context.Context, in *DeleteRequest, 
 // All implementations must embed UnimplementedObjectServiceAPIServer
 // for forward compatibility
 type ObjectServiceAPIServer interface {
-	Status(context.Context, *StatusRequest) (*StatusResponse, error)
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	GetById(context.Context, *GetByIdRequest) (*GetByIdResponse, error)
 	GetList(context.Context, *GetListRequest) (*GetListResponse, error)
 	Search(context.Context, *SearchRequest) (*SearchResponse, error)
+	GetNearest(context.Context, *GetNearestRequest) (*GetNearestResponse, error)
 	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
 	Delete(context.Context, *DeleteRequest) (*DeleteResponse, error)
 	mustEmbedUnimplementedObjectServiceAPIServer()
@@ -120,9 +120,6 @@ type ObjectServiceAPIServer interface {
 type UnimplementedObjectServiceAPIServer struct {
 }
 
-func (UnimplementedObjectServiceAPIServer) Status(context.Context, *StatusRequest) (*StatusResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Status not implemented")
-}
 func (UnimplementedObjectServiceAPIServer) Create(context.Context, *CreateRequest) (*CreateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
@@ -134,6 +131,9 @@ func (UnimplementedObjectServiceAPIServer) GetList(context.Context, *GetListRequ
 }
 func (UnimplementedObjectServiceAPIServer) Search(context.Context, *SearchRequest) (*SearchResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
+}
+func (UnimplementedObjectServiceAPIServer) GetNearest(context.Context, *GetNearestRequest) (*GetNearestResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetNearest not implemented")
 }
 func (UnimplementedObjectServiceAPIServer) Update(context.Context, *UpdateRequest) (*UpdateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
@@ -152,24 +152,6 @@ type UnsafeObjectServiceAPIServer interface {
 
 func RegisterObjectServiceAPIServer(s grpc.ServiceRegistrar, srv ObjectServiceAPIServer) {
 	s.RegisterService(&ObjectServiceAPI_ServiceDesc, srv)
-}
-
-func _ObjectServiceAPI_Status_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StatusRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ObjectServiceAPIServer).Status(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/object_service_api.ObjectServiceAPI/Status",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ObjectServiceAPIServer).Status(ctx, req.(*StatusRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _ObjectServiceAPI_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -244,6 +226,24 @@ func _ObjectServiceAPI_Search_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ObjectServiceAPI_GetNearest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNearestRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ObjectServiceAPIServer).GetNearest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/object_service_api.ObjectServiceAPI/GetNearest",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ObjectServiceAPIServer).GetNearest(ctx, req.(*GetNearestRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ObjectServiceAPI_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateRequest)
 	if err := dec(in); err != nil {
@@ -288,10 +288,6 @@ var ObjectServiceAPI_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ObjectServiceAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Status",
-			Handler:    _ObjectServiceAPI_Status_Handler,
-		},
-		{
 			MethodName: "Create",
 			Handler:    _ObjectServiceAPI_Create_Handler,
 		},
@@ -306,6 +302,10 @@ var ObjectServiceAPI_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _ObjectServiceAPI_Search_Handler,
+		},
+		{
+			MethodName: "GetNearest",
+			Handler:    _ObjectServiceAPI_GetNearest_Handler,
 		},
 		{
 			MethodName: "Update",
