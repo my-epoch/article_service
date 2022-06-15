@@ -18,3 +18,9 @@ func (or *ObjectRepository) Create(object *model.Object) error {
 	result := or.db.Create(&object)
 	return result.Error
 }
+
+func (or *ObjectRepository) GetById(id uint32) (*model.Object, error) {
+	var object model.Object
+	result := or.db.First(&object, "id = ?", id)
+	return &object, result.Error
+}
