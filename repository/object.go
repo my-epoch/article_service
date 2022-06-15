@@ -21,7 +21,7 @@ func (or *ObjectRepository) Create(object *model.Object) error {
 
 func (or *ObjectRepository) GetById(id uint32) (*model.Object, error) {
 	var object model.Object
-	result := or.db.First(&object, "id = ?", id)
+	result := or.db.Take(&object, "id = ?", id)
 	return &object, result.Error
 }
 
