@@ -13,6 +13,7 @@ message Object {
 
   float latitude = 5;
   float longitude = 6;
+  string address = 7;
 }
 
 message ObjectShort {
@@ -22,6 +23,7 @@ message ObjectShort {
 
   float latitude = 4;
   float longitude = 5;
+  string address = 7;
 }
 
 message GetByIdRequest {
@@ -38,6 +40,7 @@ message CreateRequest {
   string description = 3;
   float latitude = 4;
   float longitude = 5;
+  string address = 6;
 }
 
 message CreateResponse {
@@ -51,6 +54,7 @@ message UpdateRequest {
   string description = 4;
   float latitude = 5;
   float longitude = 6;
+  string address = 7;
 }
 
 message UpdateResponse {

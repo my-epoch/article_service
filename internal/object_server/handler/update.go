@@ -26,6 +26,7 @@ func Update(_ context.Context, request *pb.UpdateRequest) (*pb.UpdateResponse, e
 	object.Description = request.Description
 	object.Latitude = request.Latitude
 	object.Longitude = request.Longitude
+	object.Address = request.Address
 
 	if err := objectRepository.Save(object); err != nil {
 		return nil, database.ErrorTransfer(err, "Object")

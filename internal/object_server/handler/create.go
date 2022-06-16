@@ -26,6 +26,7 @@ func Create(_ context.Context, request *pb.CreateRequest) (*pb.CreateResponse, e
 		Description:   request.Description,
 		Latitude:      request.Latitude,
 		Longitude:     request.Longitude,
+		Address:       request.Address,
 	}
 
 	if err := objectRepository.Create(&object); err != nil {

@@ -13,6 +13,7 @@ func ObjectModelToPb(object *model.Object) *pb.Object {
 		Description:   object.Description,
 		Latitude:      object.Latitude,
 		Longitude:     object.Longitude,
+		Address:       object.Address,
 	}
 }
 
@@ -23,6 +24,7 @@ func ObjectModelToPbShort(object *model.Object) *pb.ObjectShort {
 		MainImageUuid: object.MainImageUUID.String(),
 		Latitude:      object.Latitude,
 		Longitude:     object.Longitude,
+		Address:       object.Address,
 	}
 }
 

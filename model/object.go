@@ -14,4 +14,5 @@ type Object struct {
 
 	Latitude  float32
 	Longitude float32
+	Address   string
 }

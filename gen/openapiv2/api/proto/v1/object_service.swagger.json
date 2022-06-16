@@ -154,6 +154,9 @@
                 "longitude": {
                   "type": "number",
                   "format": "float"
+                },
+                "address": {
+                  "type": "string"
                 }
               }
             }
@@ -298,6 +301,9 @@
         "longitude": {
           "type": "number",
           "format": "float"
+        },
+        "address": {
+          "type": "string"
         }
       }
     },
@@ -370,6 +376,9 @@
         "longitude": {
           "type": "number",
           "format": "float"
+        },
+        "address": {
+          "type": "string"
         }
       }
     },
@@ -393,6 +402,9 @@
         "longitude": {
           "type": "number",
           "format": "float"
+        },
+        "address": {
+          "type": "string"
         }
       }
     },
