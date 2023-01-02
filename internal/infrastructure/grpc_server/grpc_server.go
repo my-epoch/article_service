@@ -3,7 +3,7 @@ package grpc_server
 import (
 	"fmt"
 	"github.com/ShuffleBoy/goapp/logger"
-	"github.com/my-epoch/article_service/internal/config"
+	"github.com/my-epoch/article_service/internal/infrastructure/config"
 	"github.com/my-epoch/proto/article_gen"
 	"google.golang.org/grpc"
 	"net"
